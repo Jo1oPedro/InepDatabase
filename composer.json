@@ -1,0 +1,17 @@
+{
+    "name": "sdad/trab",
+    "autoload": {
+        "psr-4": {
+            "Sdad\\Trab\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "João Pedro",
+            "email": "joao.pedreira@estudante.ufjf.br"
+        }
+    ],
+    "require": {
+        "symfony/var-dumper": "^7.1"
+    }
+}
