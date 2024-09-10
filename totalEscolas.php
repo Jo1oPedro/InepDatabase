@@ -56,24 +56,52 @@ $regioes = [
     "TO" => "norte"
 ];
 
+$totalEscolas = 0;
 $escolasPorEstado = [];
 $escolasPorRegiao = [];
+$escolasLocalizacao = [];
+$totalEscolasPublicasPrivadas = [];
+$proporcaoModalidadeEscolas = [];
 
 foreach(Excel::readCsv(__DIR__ . "/analise.csv") as $line) {
+    $totalEscolas++;
     if(!array_key_exists($line[3], $escolasPorEstado)) {
-        $escolasPorEstado[$line[3]] = 0;
+        $escolasPorEstado[$line[3]] = 1;
     } else {
         $escolasPorEstado[$line[3]]++;
     }
+    if(!array_key_exists($line[5], $escolasLocalizacao)) {
+        $escolasLocalizacao[$line[5]] = 1;
+    } else {
+        $escolasLocalizacao[$line[5]]++;
+    }
+    if(!array_key_exists($line[7], $totalEscolasPublicasPrivadas)) {
+        $totalEscolasPublicasPrivadas[$line[7]] = 1;
+    } else {
+        $totalEscolasPublicasPrivadas[$line[7]]++;
+    }
+    if(!array_key_exists($line[15], $proporcaoModalidadeEscolas)) {
+        $proporcaoModalidadeEscolas[$line[15]] = 1;
+    } else {
+        $proporcaoModalidadeEscolas[$line[15]]++;
+    }
 }
 
-foreach($escolasPorEstado as $key => $totalEscolas) {
+foreach($escolasPorEstado as $key => $totalEscolasEstado) {
     if(!array_key_exists($regioes[$key], $escolasPorRegiao)) {
-        $escolasPorRegiao[$regioes[$key]] = $totalEscolas;
+        $escolasPorRegiao[$regioes[$key]] = $totalEscolasEstado;
     } else {
-        $escolasPorRegiao[$regioes[$key]] += $totalEscolas;
+        $escolasPorRegiao[$regioes[$key]] += $totalEscolasEstado;
     }
+}
+
+$proporcaoEscolas = [];
+foreach($proporcaoModalidadeEscolas as $key => $modalidade) {
+    $proporcaoEscolas[$key] = number_format(($modalidade / $totalEscolas) * 100, 2);
 }
 
 Excel::writeExcelOneLine("totalEscolasRegiao.csv", $escolasPorRegiao);
 Excel::writeExcelOneLine("totalEscolasEstado.csv", $escolasPorEstado);
+Excel::writeExcelOneLine("totalEscolasLocalizao.csv", $escolasLocalizacao);
+Excel::writeExcelOneLine("totalEscolasPublicasPrivadas.csv", $totalEscolasPublicasPrivadas);
+Excel::writeExcelOneLine("totalProporcaoModalidadeEscolas.csv", $proporcaoModalidadeEscolas);
