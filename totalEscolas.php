@@ -62,6 +62,7 @@ $escolasPorRegiao = [];
 $escolasLocalizacao = [];
 $totalEscolasPublicasPrivadas = [];
 $proporcaoModalidadeEscolas = [];
+$proporcaoPorteEscolasEmMg = [];
 
 foreach(Excel::readCsv(__DIR__ . "/analise.csv") as $line) {
     $totalEscolas++;
@@ -85,6 +86,13 @@ foreach(Excel::readCsv(__DIR__ . "/analise.csv") as $line) {
     } else {
         $proporcaoModalidadeEscolas[$line[15]]++;
     }
+    if($line[3] === "MG") {
+        if(!array_key_exists($line[14], $proporcaoPorteEscolasEmMg)) {
+            $proporcaoPorteEscolasEmMg[$line[14]] = 1;
+        } else {
+            $proporcaoPorteEscolasEmMg[$line[14]]++;
+        }
+    }
 }
 
 foreach($escolasPorEstado as $key => $totalEscolasEstado) {
@@ -105,3 +113,4 @@ Excel::writeExcelOneLine("totalEscolasEstado.csv", $escolasPorEstado);
 Excel::writeExcelOneLine("totalEscolasLocalizao.csv", $escolasLocalizacao);
 Excel::writeExcelOneLine("totalEscolasPublicasPrivadas.csv", $totalEscolasPublicasPrivadas);
 Excel::writeExcelOneLine("totalProporcaoModalidadeEscolas.csv", $proporcaoModalidadeEscolas);
+Excel::writeExcelOneLine("totalProporcaoPorteEscolasMg.csv", $proporcaoPorteEscolasEmMg);
